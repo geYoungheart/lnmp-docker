@@ -1,0 +1,57 @@
+mysql:
+  image: mysql
+  container_name: my-mysql
+  privileged: false
+  restart: always
+  ports:
+  - 3306:3306
+  volumes:
+  - ./mysql:/var/lib/mysql
+  environment:
+  - MYSQL_ROOT_PASSWORD=toOR8TOor
+
+##phpmyadmin 不用可以注释
+phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: my-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "toOR8TOor"
+      MYSQL_ROOT_PASSWORD: "toOR8TOor"
+      PMA_HOST: my-mysql
+    links:
+    - mysql
+##phpmyadmin
+
+
+redis:
+  image: redis
+  container_name: my-redis
+  privileged: false
+  restart: always
+  environment:
+  - REDIS_PASS=**None**
+php:
+  image: hteen/php
+  container_name: my-php
+  volumes:
+    - ./web:/www
+    - ./php/php.ini:/usr/local/etc/php/php.ini
+  links:
+    - mysql
+    - redis
+nginx:
+  image: nginx
+  container_name: my-nginx
+  #restart: always    #重启方案
+  volumes:
+    - ./config/vhost.conf:/etc/nginx/conf.d/www.test.conf:cached
+  volumes_from:
+    - php
+  ports:
+    - 443:443
+    - 80:80
+  links:
+    - php
