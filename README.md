@@ -1,7 +1,7 @@
 
 #### 测试
 
-# debian9 桌面版
+###  测试环境 debian9 桌面版+Docker version 18.09.0
 
 ### 克隆Git仓库。需要提前安装好Git。
 ```linux
